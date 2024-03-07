@@ -1,11 +1,13 @@
 using FootballPlayersCatalog.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using FootballPlayersCatalog.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSignalR();
 
 //DB Connect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -23,10 +25,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
+app.MapHub<PlayerHub>("/playerhub");
 
 app.MapControllerRoute(
     name: "default",

@@ -7,7 +7,7 @@
     <h1 class="display-4 text-center mt-5">Список игроков</h1>
 </div>
 
-<table class="table">
+<table id="player-table" class="table">
     <thead>
         <tr>
             <th>Имя</th>
@@ -51,6 +51,23 @@
 </table>
 
 @section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+    <script>
+        var connection = new signalR.HubConnectionBuilder().withUrl("/playerhub").build();
+
+        connection.on("ReceivePlayerUpdate", function (message) {
+            $.get("/PlayersList/Index", function (data) {
+                var newHtml = $(data).find("tbody").html();
+                $("#player-table tbody").html(newHtml);
+            });
+        });
+
+        connection.start().then(function () {
+            console.log("Соединение с хабом установлено");
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+    </script>
     <script>
         function showEditFields(button) {
             var row = button.closest('tr');

@@ -2,7 +2,9 @@
 using FootballPlayersCatalog.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
 using System.Diagnostics;
+using FootballPlayersCatalog.Hubs;
 
 namespace FootballPlayersCatalog.Controllers
 {
@@ -10,11 +12,13 @@ namespace FootballPlayersCatalog.Controllers
     {
         private readonly ILogger<AddPlayerController> _logger;
         private readonly ApplicationDbContext _dbContext;
+        private readonly IHubContext<PlayerHub> _hubContext;
 
-        public AddPlayerController(ApplicationDbContext dbContext, ILogger<AddPlayerController> logger)
+        public AddPlayerController(ApplicationDbContext dbContext, ILogger<AddPlayerController> logger, IHubContext<PlayerHub> hubContext)
         {
             _dbContext = dbContext;
             _logger = logger;
+            _hubContext = hubContext;
         }
 
         public IActionResult Index()
@@ -30,6 +34,7 @@ namespace FootballPlayersCatalog.Controllers
                 addPlayerForm.BirthDate = addPlayerForm.BirthDate.Date;
                 _dbContext.Players.Add(addPlayerForm);
                 _dbContext.SaveChanges();
+                _hubContext.Clients.All.SendAsync("ReceivePlayerUpdate", "Данные были обновлены");
                 return RedirectToAction("Index", "");
             }
 
