@@ -20,7 +20,8 @@ namespace FootballPlayersCatalog.Migrations
                     Surname = table.Column<string>(type: "text", nullable: false),
                     Gender = table.Column<string>(type: "text", nullable: false),
                     BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Team = table.Column<string>(type: "text", nullable: false)
+                    Team = table.Column<string>(type: "text", nullable: false),
+                    Country = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {

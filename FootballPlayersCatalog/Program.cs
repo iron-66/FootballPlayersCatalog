@@ -1,7 +1,6 @@
 using FootballPlayersCatalog.Context;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using FootballPlayersCatalog.Hubs;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

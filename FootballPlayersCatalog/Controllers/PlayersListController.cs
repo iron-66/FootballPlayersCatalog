@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using FootballPlayersCatalog.Context;
 using FootballPlayersCatalog.Models;
 
@@ -8,16 +7,17 @@ namespace FootballPlayersCatalog.Controllers
     public class PlayersListController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly List<PlayerFormModel> _players;
 
         public PlayersListController(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
+            _players = _dbContext.Players.ToList();
         }
 
         public IActionResult Index()
         {
-            var players = _dbContext.Players.ToList();
-            return View(players);
+            return View(_players);
         }
 
         [HttpPost]
@@ -26,21 +26,20 @@ namespace FootballPlayersCatalog.Controllers
             if (ModelState.IsValid)
             {
                 var existingPlayer = _dbContext.Players.Find(model.Id);
-                if (existingPlayer != null)
+                if (existingPlayer != null && model.BirthDate.Year > 1924 && model.BirthDate.Year < 2024)
                 {
                     existingPlayer.Name = model.Name;
                     existingPlayer.Surname = model.Surname;
                     existingPlayer.Gender = model.Gender;
                     existingPlayer.BirthDate = model.BirthDate;
                     existingPlayer.Team = model.Team;
+                    existingPlayer.Country = model.Country;
 
                     _dbContext.SaveChanges();
                     return RedirectToAction("Index", "/PlayersList");
                 }
-                return NotFound();
             }
-            return BadRequest();
+            return View("Index", _players);
         }
     }
 }
-

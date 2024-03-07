@@ -26,7 +26,11 @@ namespace FootballPlayersCatalog.Models
         public DateTime BirthDate { get; set; }
 
         [Display(Name = "Команда")]
-        [Required(ErrorMessage = "Выберите команду")]
+        [Required(ErrorMessage = "Введите команду")]
         public string Team { get; set; }
+
+        [Display(Name = "Страна")]
+        [Required(ErrorMessage = "Выберите страну")]
+        public string Country { get; set; }
     }
 }
