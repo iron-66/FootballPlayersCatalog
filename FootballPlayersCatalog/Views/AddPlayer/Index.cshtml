@@ -39,7 +39,15 @@
 
                 <div class="form-group">
                     <label asp-for="Team"><strong>Название команды</strong></label>
-                    <input asp-for="Team" class="form-control" />
+                    <select asp-for="Team" class="form-control">
+                        <option value="" selected disabled>Выберите вариант</option>
+                        @foreach (var team in ViewBag.UniqueTeams)
+                        {
+                            <option value="@team">@team</option>
+                        }
+                        <option value="Другая">Указать свою команду</option>
+                    </select>
+                    <input type="text" id="otherTeamInput" name="OtherTeam" class="form-control d-none" placeholder="Введите название команды">
                     <span asp-validation-for="Team" class="text-danger"></span>
                 </div>
 
@@ -59,3 +67,20 @@
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Обработчик изменения значения поля "Название команды"
+    document.addEventListener('DOMContentLoaded', function () {
+        $('#Team').change(function () {
+            if ($(this).val() === 'Другая') {
+                // Если выбрана "Другая", удаляем класс d-none для отображения поля ввода другого названия команды и фокусируемся на нем
+                $('#otherTeamInput').removeClass('d-none').focus();
+            }
+            else {
+                // Иначе добавляем класс d-none для скрытия поля ввода другого названия команды и очищаем его значение
+                $('#otherTeamInput').addClass('d-none').val('');
+            }
+        });
+    });
+</script>

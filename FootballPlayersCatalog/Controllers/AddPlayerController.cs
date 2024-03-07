@@ -30,8 +30,11 @@ namespace FootballPlayersCatalog.Controllers
         /// Возвращает представление для для отображения формы добавления игрока
         /// </summary>
         /// <returns>Представление для добавления нового игрока</returns>
+        [HttpGet]
         public IActionResult Index()
         {
+            var uniqueTeams = _dbContext.Players.Select(p => p.Team).Distinct().ToList();
+            ViewBag.UniqueTeams = uniqueTeams;
             return View();
         }
 
@@ -43,9 +46,9 @@ namespace FootballPlayersCatalog.Controllers
         [HttpPost]
         public IActionResult Check(PlayerFormModel addPlayerForm)
         {
-            if (ModelState.IsValid && addPlayerForm.BirthDate.Year > 1924 && addPlayerForm.BirthDate.Year < 2024)
+            if (ModelState.IsValid && addPlayerForm.BirthDate.Value.Year > 1924 && addPlayerForm.BirthDate.Value.Year < 2024)
             {
-                addPlayerForm.BirthDate = addPlayerForm.BirthDate.Date;
+                addPlayerForm.BirthDate = addPlayerForm.BirthDate.Value.Date;
                 _dbContext.Players.Add(addPlayerForm);
                 _dbContext.SaveChanges();
                 _hubContext.Clients.All.SendAsync("ReceivePlayerUpdate", "Данные были обновлены");
@@ -53,6 +56,8 @@ namespace FootballPlayersCatalog.Controllers
                 return RedirectToAction("Index", "");
             }
 
+            var uniqueTeams = _dbContext.Players.Select(p => p.Team).Distinct().ToList();
+            ViewBag.UniqueTeams = uniqueTeams;
             return View("Index", addPlayerForm);
         }
 

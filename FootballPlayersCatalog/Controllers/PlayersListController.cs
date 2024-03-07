@@ -43,7 +43,7 @@ namespace FootballPlayersCatalog.Controllers
             {
                 var existingPlayer = _dbContext.Players.Find(model.Id);
 
-                if (existingPlayer != null && model.BirthDate.Year > 1924 && model.BirthDate.Year < 2024)
+                if (existingPlayer != null && model.BirthDate.Value.Year > 1924 && model.BirthDate.Value.Year < 2024)
                 {
                     existingPlayer.Name = model.Name;
                     existingPlayer.Surname = model.Surname;

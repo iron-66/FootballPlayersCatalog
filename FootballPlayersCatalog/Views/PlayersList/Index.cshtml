@@ -27,7 +27,7 @@
                 <td>@player.Name</td>
                 <td>@player.Surname</td>
                 <td>@player.Gender</td>
-                <td>@player.BirthDate.ToShortDateString()</td>
+                <td>@player.BirthDate.Value.ToShortDateString()</td>
                 <td>@player.Team</td>
                 <td>@player.Country</td>
                 <td><button onclick="showEditFields(this)">Редактировать</button></td>
@@ -38,7 +38,7 @@
                     <td><input type="text" name="Name" value="@player.Name"/></td>
                     <td><input type="text" name="Surname" value="@player.Surname"/></td>
                     <td><input type="text" name="Gender" value="@player.Gender"/></td>
-                    <td><input type="date" name="BirthDate" value="@player.BirthDate.ToString("yyyy-MM-dd")"/></td>
+                    <td><input type="date" name="BirthDate" value="@player.BirthDate.Value.ToString("yyyy-MM-dd")"/></td>
                     <td><input type="text" name="Team" value="@player.Team" /></td>
                     <td>
                         <select name="Country">
