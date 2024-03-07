@@ -1,24 +1,21 @@
+using Microsoft.EntityFrameworkCore;
 using FootballPlayersCatalog.Context;
 using FootballPlayersCatalog.Hubs;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Добавление сервисов и подключение к базе данных
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
-
-//DB Connect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Конфигурация обработчика HTTP запросов
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -26,8 +23,11 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
+
+// Маршрутизация хаба SignalR
 app.MapHub<PlayerHub>("/playerhub");
 
+// Установка маршрута по умолчанию для контроллера "AddPlayer" с действием "Index".
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=AddPlayer}/{action=Index}/{id?}");

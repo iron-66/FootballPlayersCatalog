@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FootballPlayersCatalog.Models
 {
+    /// <summary>
+    /// Модель формы для игрока
+    /// </summary>
     public class PlayerFormModel
     {
         [Key]
@@ -23,6 +26,7 @@ namespace FootballPlayersCatalog.Models
         [Display(Name = "Дата рождения")]
         [Required(ErrorMessage = "Укажите дату рождения")]
         [Column(TypeName = "date")]
+        [Range(typeof(DateTime), "1924-01-01", "2023-12-31", ErrorMessage = "Год рождения должен быть в диапазоне от 1924 до 2023")]
         public DateTime BirthDate { get; set; }
 
         [Display(Name = "Команда")]

@@ -19,6 +19,7 @@
             <th></th>
         </tr>
     </thead>
+
     <tbody>
         @foreach (var player in Model)
         {
@@ -56,9 +57,11 @@
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
     <script>
+        // Функция для отображения полей редактирования при нажатии на кнопку "Редактировать"
         function showEditFields(button) {
             var row = button.closest('tr');
             var editRow = row.nextElementSibling;
+
             if (editRow && editRow.classList.contains('edit-row')) {
                 editRow.style.display = 'table-row';
                 row.style.display = 'none';
@@ -67,6 +70,7 @@
 
         var connection = new signalR.HubConnectionBuilder().withUrl("/playerhub").build();
 
+        // Обработчик обновлений от хаба signalR
         connection.on("ReceivePlayerUpdate", function (message) {
             $.get("/PlayersList/Index", function (data) {
                 var newHtml = $(data).find("tbody").html();
@@ -74,6 +78,7 @@
             });
         });
 
+        // Подключение к хабу SignalR
         connection.start().then(function () {
             console.log("Соединение с хабом установлено");
         }).catch(function (err) {

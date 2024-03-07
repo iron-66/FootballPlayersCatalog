@@ -1,9 +1,9 @@
-﻿using FootballPlayersCatalog.Context;
-using FootballPlayersCatalog.Models;
-using FootballPlayersCatalog.Hubs;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using System.Diagnostics;
+using FootballPlayersCatalog.Context;
+using FootballPlayersCatalog.Hubs;
+using FootballPlayersCatalog.Models;
 
 namespace FootballPlayersCatalog.Controllers
 {
@@ -12,7 +12,6 @@ namespace FootballPlayersCatalog.Controllers
     /// </summary>
     public class AddPlayerController : Controller
     {
-        private readonly ILogger<AddPlayerController> _logger;
         private readonly ApplicationDbContext _dbContext;
         private readonly IHubContext<PlayerHub> _hubContext;
 
@@ -20,12 +19,10 @@ namespace FootballPlayersCatalog.Controllers
         /// Конструктор контроллера AddPlayerController
         /// </summary>
         /// <param name="dbContext">Контекст базы данных</param>
-        /// <param name="logger">Логгер</param>
         /// <param name="hubContext">Контекст хаба SignalR</param>
-        public AddPlayerController(ApplicationDbContext dbContext, ILogger<AddPlayerController> logger, IHubContext<PlayerHub> hubContext)
+        public AddPlayerController(ApplicationDbContext dbContext, IHubContext<PlayerHub> hubContext)
         {
             _dbContext = dbContext;
-            _logger = logger;
             _hubContext = hubContext;
         }
 
@@ -39,19 +36,20 @@ namespace FootballPlayersCatalog.Controllers
         }
 
         /// <summary>
-        /// Обработка данных формы для добавления нового игрока
+        /// Обрабатывает данные формы для добавления нового игрока
         /// </summary>
         /// <param name="addPlayerForm">Модель формы добавления игрока</param>
         /// <returns>Редирект на главную страницу или отображение ошибок заполнения формы</returns>
         [HttpPost]
         public IActionResult Check(PlayerFormModel addPlayerForm)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && addPlayerForm.BirthDate.Year > 1924 && addPlayerForm.BirthDate.Year < 2024)
             {
                 addPlayerForm.BirthDate = addPlayerForm.BirthDate.Date;
                 _dbContext.Players.Add(addPlayerForm);
                 _dbContext.SaveChanges();
                 _hubContext.Clients.All.SendAsync("ReceivePlayerUpdate", "Данные были обновлены");
+
                 return RedirectToAction("Index", "");
             }
 
