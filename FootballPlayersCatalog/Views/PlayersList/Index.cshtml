@@ -1,0 +1,64 @@
+﻿@model List<FootballPlayersCatalog.Models.PlayerFormModel>
+@{
+    ViewData["Title"] = "Список игроков";
+}
+
+<div class="text-center">
+    <h1 class="display-4 text-center mt-5">Список игроков</h1>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>Пол</th>
+            <th>Дата рождения</th>
+            <th>Команда</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var player in Model)
+        {
+            <tr>
+                <td>@player.Name</td>
+                <td>@player.Surname</td>
+                <td>@player.Gender</td>
+                <td>@player.BirthDate.ToShortDateString()</td>
+                <td>@player.Team</td>
+                <td><button onclick="showEditFields(this)">Редактировать</button></td>
+            </tr>
+            <tr class="edit-row" style="display: none;">
+                <form asp-controller="PlayersList" asp-action="Edit" method="post">
+                    <input type="hidden" name="Id" value="@player.Id"/>
+                    <td><input type="text" name="Name" value="@player.Name"/></td>
+                    <td><input type="text" name="Surname" value="@player.Surname"/></td>
+                    <td><input type="text" name="Gender" value="@player.Gender"/></td>
+                    <td><input type="date" name="BirthDate" value="@player.BirthDate.ToString("yyyy-MM-dd")"/></td>
+                    <td>
+                    <select name="Team">
+                        <option value="Россия" selected="@("Россия" == @player.Team)">Россия</option>
+                        <option value="США" selected="@("США" == @player.Team)">США</option>
+                        <option value="Италия" selected="@("Италия" == @player.Team)">Италия</option>
+                    </select>
+                    </td>
+                    <td><button type="submit">Сохранить</button></td>
+                </form>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        function showEditFields(button) {
+            var row = button.closest('tr');
+            var editRow = row.nextElementSibling;
+            if (editRow && editRow.classList.contains('edit-row')) {
+                editRow.style.display = 'table-row';
+                row.style.display = 'none';
+            }
+        }
+    </script>
+}

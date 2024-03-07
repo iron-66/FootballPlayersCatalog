@@ -1,0 +1,55 @@
+﻿@model PlayerFormModel
+@{
+    ViewData["Title"] = "Добавление игроков";
+}
+
+<div class="container">
+    <h1 class="display-4 text-center mt-5">Страница добавления игроков</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post" asp-controller="AddPlayer" asp-action="Check" class=" mt-4">
+
+                <div class="form-group">
+                    <label asp-for="Name"><strong>Имя</strong></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Surname"><strong>Фамилия</strong></label>
+                    <input asp-for="Surname" class="form-control" />
+                    <span asp-validation-for="Surname" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Gender"><strong>Пол</strong></label>
+                    <select asp-for="Gender" class="form-control">
+                        <option value="" selected disabled>Выберите вариант</option>
+                        <option value="Мужской">Мужской</option>
+                        <option value="Женский">Женский</option>
+                    </select>
+                    <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="BirthDate"><strong>Дата рождения</strong></label>
+                    <input asp-for="BirthDate" type="date" class="form-control" />
+                    <span asp-validation-for="BirthDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Team"><strong>Команда</strong></label>
+                    <select asp-for="Team" class="form-control">
+                        <option value="" selected disabled>Выберите вариант</option>
+                        <option value="Россия">Россия</option>
+                        <option value="США">США</option>
+                        <option value="Италия">Италия</option>
+                    </select>
+                    <span asp-validation-for="Team" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3">Добавить футболиста</button>
+            </form>
+        </div>
+    </div>
+</div>
